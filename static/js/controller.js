@@ -15,7 +15,9 @@ angular.module('myApp', [])
         // });
         // end syntax
 
-    var x,y,w,h;
+    var x,y,w,h, realWidth, realHeight;
+
+    
     $scope.crop = function(){
         $('.object').hide();
 
@@ -107,6 +109,15 @@ angular.module('myApp', [])
                         $('#image').css('background-image','url("'+url+'")');
                         $('#image').css('background-repeat','no-repeat');
                         $('#image').css('background-size','cover');
+                        realHeight = $('#image').height();
+                        setTimeout(function(){
+                            // Get the width here
+
+                            realWidth = $('#image').width();
+                            alert(realWidth);
+                        },500);
+                        console.log(realWidth);
+                        
                         $scope.params = url;
                         $http({
                             method: 'POST',
@@ -158,6 +169,8 @@ angular.module('myApp', [])
 
                     });   
                 });
+                
+
 
             }
         }, function (error) {
@@ -166,6 +179,7 @@ angular.module('myApp', [])
     }
 
     $scope.getListOfImages();
+
     $scope.submitLink=function (){
             // alert("clicked!");
             
@@ -191,6 +205,7 @@ angular.module('myApp', [])
         }
     })
     $('#submit').click(function(event) {
+
         var imageUrl= $('#autocomplete').val();
             $scope.params = imageUrl;
             console.log($scope.params);
@@ -212,9 +227,11 @@ angular.module('myApp', [])
             }
             
     });
+
     $scope.submitCrop= function(){
-        console.log(x,y,w,h);
-        var info = [{'x':x},{'y':y},{'w':w},{'h':h}];
+        alert(realWidth);
+        console.log(x,y,w,h,realWidth,realHeight);
+        var info = [{'x':x},{'y':y},{'w':w},{'h':h},{'realWidth':realWidth},{'realHeight':realHeight}];
         $http({
             method: 'POST',
             url: '/cropped_objects_dectection',
